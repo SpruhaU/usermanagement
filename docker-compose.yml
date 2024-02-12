@@ -1,11 +1,38 @@
-version: "3.8"
+version: "3.6"
 services:
-  app:
-    build: .
-    volumes:
-      - .:/django
+  # Master
+  manager:
+    image: "spruha29/spruha-thesis-repo1:v1.1"
+    networks:
+      - cluster-net
     ports:
-      - 8000:8000
-    image: app:django
-    container_name: django_container
-    command: python manage.py runserver 0.0.0.0:8000
+      - 8080:8080
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        constraints:
+          - node.role==manager
+
+  # Workers
+  worker:
+    image: "spruha29/spruha-thesis-repo1:v1.1"
+    networks:
+      - cluster-net
+    ports:
+      - 8081:8081
+    depends_on:
+      - "manager"
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role!=manager
+
+# Uses host network
+networks:
+  cluster-net:
+    name: host
+    external: true
+    driver_opts:
+      com.docker.network.driver.mtu: 1280
