@@ -4,8 +4,8 @@ WORKDIR /django
 COPY requirements.txt requirements.txt
 
 # Install Python dependencies
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 
 # Install social-auth-app-django
-RUN pip3 install social-auth-app-django
+RUN pip install social-auth-app-django
