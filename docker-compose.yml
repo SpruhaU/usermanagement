@@ -21,8 +21,6 @@ services:
       - cluster-net
     ports:
       - 8081:8081
-    depends_on:
-      - "manager"
     deploy:
       mode: global
       placement:
